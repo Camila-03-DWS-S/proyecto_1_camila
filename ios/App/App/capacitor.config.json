@@ -1,0 +1,11 @@
+{
+	"appId": "actividad.v1.descargas",
+	"appName": "actividad-1-descargas",
+	"webDir": "dist",
+	"packageClassList": [
+		"AppPlugin",
+		"HapticsPlugin",
+		"KeyboardPlugin",
+		"StatusBarPlugin"
+	]
+}
