@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'actividad.v1.descargas',
-  appName: 'actividad-1-descargas',
+  appId: 'ec.edu.tesa.riksiri',
+  appName: 'Riksiri',
   webDir: 'dist'
 };
 
