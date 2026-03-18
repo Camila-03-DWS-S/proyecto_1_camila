@@ -32,6 +32,7 @@
     
 </template>
 <script setup lang="ts">
+defineOptions({ name: 'LoginView' });
 import {
     IonPage,
     IonHeader,
@@ -59,8 +60,9 @@ async function login() {
         router.push(res.home.url);
     } catch (err: any) {
         const message =
-            err?.response?.data?.message ?? 'Error al iniciar sesiÃ³n';
+            err?.response?.data?.message ?? 'Error al iniciar sesión';
         alert(message);
     }
 }   
 </script>
+

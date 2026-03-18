@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import axiosRiksiri from '../axios/axiosRiksiri';
 
 // You can name the return value of `defineStore()` anything you want,

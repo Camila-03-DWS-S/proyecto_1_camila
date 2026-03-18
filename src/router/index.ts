@@ -5,6 +5,7 @@ import { useUserStore } from '@/stores/user';
 
 const Login = () => import('@/views/Login.vue');
 const Registro = () => import('@/views/Registro.vue');
+const Camara = () => import('@/views/Camara.vue');
 const Seccion1 = () => import('@/views/secciones/Seccion1.vue');
 const Seccion = () => import('@/views/secciones/Seccion.vue');
 
@@ -16,6 +17,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     component: Login,
+    meta: { requiresAuth: false }
+  },
+    {
+    path: '/camara',
+    component: Camara,
     meta: { requiresAuth: false }
   },
   {
@@ -41,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "seccion",
         component:  Seccion,
         meta: {
-          title: 'Riksiri - SecciÃ³n',
+          title: 'Riksiri - Sección',
         }
       },
     ]
@@ -66,3 +72,4 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router
+

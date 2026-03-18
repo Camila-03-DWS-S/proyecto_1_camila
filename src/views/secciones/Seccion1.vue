@@ -5,5 +5,6 @@
     </ion-page>
 </template>
 <script setup lang="ts">
+defineOptions({ name: 'Seccion1View' });
 import { IonPage } from '@ionic/vue';
 </script>

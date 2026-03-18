@@ -15,6 +15,7 @@
 </template>
     
 <script setup lang="ts">
+defineOptions({ name: 'ContenidoBlock' });
 import { useContentStore } from '@/stores/content';
 import { computed } from 'vue';
 const contentStore = useContentStore();

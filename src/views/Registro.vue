@@ -55,6 +55,7 @@
     </ion-page>
 </template>
 <script setup lang="ts">
+defineOptions({ name: 'RegistroView' });
 import { IonPage, IonHeader, 
 IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonItem, IonLabel, IonInput, IonText } from '@ionic/vue';
 import { useUserStore } from '@/stores/user';

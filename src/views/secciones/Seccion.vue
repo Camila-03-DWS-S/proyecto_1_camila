@@ -5,7 +5,7 @@
             <ion-item v-if="contenido.to === 'seccion-text-area'">
                 <ion-textarea 
                 label="" 
-                placeholder="Escribe aquÃ­..."
+                placeholder="Escribe aquí..."
                 v-model="contentStore.contenido_usuario"
                 ></ion-textarea>
             </ion-item>
@@ -19,6 +19,7 @@
     </ion-page>  
 </template>
 <script setup lang="ts">
+defineOptions({ name: 'SeccionView' });
 import { IonPage, IonContent, 
     IonItem, IonTextarea, IonFooter, 
     IonToolbar, IonButton } from '@ionic/vue';
@@ -33,3 +34,4 @@ const contenido = computed(() => contentStore.contenido);
 contentStore.$getContenido(route.params.name as string);
 
 </script>
+

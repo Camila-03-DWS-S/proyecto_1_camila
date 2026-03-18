@@ -15,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'CamaraView' });
 import { ref } from 'vue';
 import {
     IonPage,
