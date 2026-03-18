@@ -16,7 +16,7 @@
                     <ion-button slot="end" @click="logout">Salir</ion-button>
                 </ion-item>
                 <ion-accordion-group>
-                    <ion-accordion v-for="(menu, key) in userStore.menu" :key="key" :value="'menu-'+key">
+                    <ion-accordion v-for="(menu, key) in contentStore.menu" :key="key" :value="'menu-'+key">
                         <ion-item slot="header" color="light">
                             <ion-label><i :class="menu.icon" aria-hidden="true"></i> {{ menu.name }}</ion-label>
                         </ion-item>
@@ -67,7 +67,7 @@ async function logout() {
     router.push('/login');
 }
 
-if(!contentStore.contenido?.to){
+if(!contentStore.content.to){
     contentStore.$getContenido(route.params.name as string);
 }
 </script>

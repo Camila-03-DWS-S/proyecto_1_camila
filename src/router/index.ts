@@ -6,8 +6,7 @@ import { useUserStore } from '@/stores/user';
 const Login = () => import('@/views/Login.vue');
 const Registro = () => import('@/views/Registro.vue');
 const Camara = () => import('@/views/Camara.vue');
-const Seccion1 = () => import('@/views/secciones/Seccion1.vue');
-const Seccion = () => import('@/views/secciones/Seccion.vue');
+const Seccion = () => import('@/views/Seccion.vue');
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -16,60 +15,61 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
+    name: 'Login',
     component: Login,
-    meta: { requiresAuth: false }
-  },
-    {
-    path: '/camara',
-    component: Camara,
-    meta: { requiresAuth: false }
+    meta: {
+      requiresAuth: false
+    }
   },
   {
     path: '/registro',
+    name: 'Registro',
     component: Registro,
-    meta: { requiresAuth: false }
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/camara',
+    name: 'Camara',
+    component: Camara,
+    meta: {
+      requiresAuth: false
+    }
   },
   {
     path: '/seccion',
+    name: 'Seccion',  
     component: BaseLayout,
-    meta: { requiresAuth: true },
+    meta: {
+      requiresAuth: true
+    },  
     children: [
-      {
-        path: '',
-        redirect: '/seccion/seccion1'
-      },
-      {
-        path: 'seccion1',
-        component: Seccion1
-      },
-      {
+      { 
         path: ':name',
-        name: "seccion",
-        component:  Seccion,
-        meta: {
-          title: 'Riksiri - Sección',
-        }
+        name: 'SeccionContenidos',
+        component: Seccion,
       },
-    ]
+    ],  
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(), //import.meta.env.BASE_URL
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
-  const isAuthenticated = !!userStore.authToken;
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  const isAuthenticated = !!userStore.token;
+  if(to.meta.requiresAuth && !isAuthenticated) {
     next('/login');
   } else if(isAuthenticated && !to.meta.requiresAuth) {
-    next('/seccion/seccion1');
-  } else {
+    next('/seccion');
+  }else {
     next();
   }
 });
 
-export default router
 
+export default router

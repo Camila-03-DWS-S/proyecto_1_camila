@@ -1,55 +1,50 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import axiosRiksiri from '../axios/axiosRiksiri';
+import { defineStore } from "pinia";
+import { ref } from "vue";
+import axiosRiksiri from "@/axios/axiosRiksiri";    
+import { useContentStore } from "./content";
 
-// You can name the return value of `defineStore()` anything you want,
-// but it's best to use the name of the store and surround it with `use`
-// and `Store` (e.g. `useUserStore`, `useCartStore`, `useProductStore`)
-// the first argument is a unique id of the store across your application
 export const useUserStore = defineStore('user', () => {
+    const contentStore = useContentStore();
+    const token = ref(localStorage.getItem('token') || null);
+    const user = ref(JSON.parse(localStorage.getItem('user') || '{}') || null);
+    const login = ref({
+        username: null,
+        password: null  
+    })
 
     const registro = ref({
         usuario: null,
         email: null,
-        password: null
+        password: null,
     })
-    const login = ref({
-        username: null,
-        password: null
-    })  
-    const authToken = ref<string | null>(localStorage.getItem('authToken')) || null
-    const user = ref(JSON.parse(localStorage.getItem('user') || '{}')) || null
-    const menu = ref(JSON.parse(localStorage.getItem('menu') || '[]')) || []
-    function $setLogin(data: any | null) {
-        if (!data) {
-            authToken.value = null;
-            user.value = null;
-            menu.value = [];
-            localStorage.setItem('authToken', '');
-            localStorage.setItem('user', '');
-            localStorage.setItem('menu', '');
-            return null;
-        }
-        authToken.value = data.token ?? null;
-        localStorage.setItem('authToken', data.token ? data.token : '');
-        user.value = data.user ?? null;
-        localStorage.setItem('user', data.user ? JSON.stringify(data.user) : '');
-        menu.value = data.menu ?? [];
-        localStorage.setItem('menu', data.menu ? JSON.stringify(data.menu) : '');
-        return data;
+
+    function $registro(){
+        return axiosRiksiri.post('register', registro.value).then( res => {
+            $setLogin(res.data);
+            return res.data;
+        })
     }
-    function $login() {
-        return axiosRiksiri.post('login', login.value)
-            .then(response => {
-                $setLogin(response.data);
-                return response.data;
-            });
-        }
-    function $registro() {
-        return axiosRiksiri.post('register', registro.value)
-            .then(response => {
-                return response.data
-            });     
+    
+    function $login(){
+        return axiosRiksiri.post('login', login.value).then( res => {
+            $setLogin(res.data);
+            return res.data;
+        });
     }
-    return { authToken, registro, login, user, menu, $login, $registro, $setLogin }
-})
+
+    function $setLogin(data: any | null){
+        token.value = data?.token || null;
+        if(token.value) {
+            localStorage.setItem('token', token.value);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            user.value = data.user;
+            contentStore.$setMenu(data.menu);
+        } else {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('menu');
+        }
+    }
+
+    return { login, $login, token, $setLogin, registro, $registro, user }
+});

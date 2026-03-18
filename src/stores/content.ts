@@ -1,27 +1,38 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import axiosRiksiri from '../axios/axiosRiksiri';
+import { defineStore } from "pinia";
+import { ref } from "vue";
+import axiosRiksiri from "@/axios/axiosRiksiri";
 
 export const useContentStore = defineStore('content', () => {
 
-  const contenido = ref({
-    to: null,
-  });
-  const encuestas = ref([]);
-  const contenido_usuario = ref(null);  
-  const loading = ref(false);
+    const menu = ref(JSON.parse(localStorage.getItem('menu') || '[]') || []);
 
-  function $getContenido( name: string ) {  
-    loading.value = true;
-    return axiosRiksiri.get('contenido/' + name)
-      .then(response => {
-        contenido.value = response.data.contenido;
-        encuestas.value = response.data.encuestas;
-        contenido_usuario.value = response.data.contenido_usuario;
-      })
-      .finally(() => {
-        loading.value = false;
-      });
-  }
-  return { $getContenido, contenido, encuestas, contenido_usuario, loading }
-})
+    const content = ref({   
+        to: null,
+        contenido: {
+            contenido: null,
+            youtube: '',
+        },
+    })
+
+    const loading = ref(false);
+
+    function $setMenu(data: any){
+        menu.value = data;
+        if(menu.value) {
+            localStorage.setItem('menu', JSON.stringify(menu.value));
+        } else {
+            localStorage.removeItem('menu');
+        }
+    }
+
+    function $getContenido(name: string){
+        loading.value = true;
+        return axiosRiksiri.get('contenido/'+name).then( res => {
+            content.value = res.data;
+            loading.value = false;
+            return res.data;
+        }); 
+    }
+    return { content, menu, loading, $setMenu, $getContenido }
+
+});

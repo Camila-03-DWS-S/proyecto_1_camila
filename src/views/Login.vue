@@ -4,65 +4,54 @@
             <ion-toolbar>
                 <ion-title>Login</ion-title>
                 <ion-buttons slot="end">
-                    <ion-button @click="goToRegistro">Registrarse</ion-button>
+                    <ion-button  fill="solid" @click="router.push({ name: 'Registro' })">Registro</ion-button>
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
-
         <ion-content class="ion-padding">
-            <ion-item>
-                <ion-label position="floating">Usuario</ion-label>
-                <ion-input type="text" v-model="userStore.login.username"></ion-input>
-            </ion-item>
-
-            <ion-item>
-                <ion-label position="floating">Password</ion-label>
-                <ion-input
-                    type="password"
-                    v-model="userStore.login.password"
-                    @keyup.enter="login"
-                ></ion-input>
-            </ion-item>
-
-            <ion-button expand="block" @click="login">Login</ion-button>
-
-            <!-- Optional: Forgot password or Sign up links -->
+            <ion-input 
+                class="ion-margin-top"
+                label="Usuario" 
+                label-placement="floating" 
+                fill="outline" 
+                v-model="userStore.login.username"
+                placeholder="Escribe aquí tu usuario">
+            </ion-input>
+            
+            <ion-input 
+                class="ion-margin-top"
+                label="Contraseña" 
+                label-placement="floating" 
+                fill="outline" 
+                placeholder="Escribe aquí tu contraseña"
+                v-model="userStore.login.password"
+                type="password"
+                @keyup.enter="login"
+                >
+            </ion-input>
+            <ion-button expand="block" class="ion-margin-top" @click="login">Ingresar</ion-button>
         </ion-content>
     </ion-page>
-    
 </template>
 <script setup lang="ts">
-defineOptions({ name: 'LoginView' });
-import {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonButton,
-    IonButtons,
-    IonItem,
-    IonLabel,
-    IonInput,
-} from '@ionic/vue';
-import { useUserStore } from '@/stores/user';
+import { IonContent, IonHeader, IonTitle, 
+    IonToolbar, IonPage, IonInput, 
+    IonButtons, IonButton, alertController } from '@ionic/vue';
 import { useRouter } from 'vue-router';
-const userStore = useUserStore();  
-const router = useRouter();  
+import { useUserStore } from '@/stores/user';
 
-function goToRegistro() {
-    router.push('/registro');
+const userStore = useUserStore();
+const router = useRouter();
+
+function login() {
+    userStore.$login().then(response => {
+        router.push({ name: 'Seccion' });
+    }).catch(error => {
+        alertController.create({
+            header: 'Error',
+            message: error.response.data.message,
+            buttons: ['Continuar']
+        }).then(alert => alert.present());
+    });
 }
-
-async function login() {
-    try {
-        const res = await userStore.$login();
-        router.push(res.home.url);
-    } catch (err: any) {
-        const message =
-            err?.response?.data?.message ?? 'Error al iniciar sesi�n';
-        alert(message);
-    }
-}   
 </script>
-
